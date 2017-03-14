@@ -1,0 +1,17 @@
+[wallabag-kindle]
+# url of wallabag instance
+wb_url = wallabag.example.com
+# clientid for the wallabag api
+wb_client_id = someclientid
+# clientsecret for the wallabag api
+wb_client_secret = someclientsecret
+# wallabag username
+wb_user = youruser
+# wallabag password
+wb_password = example password
+# secret token for wallabag-kindle
+secret_token = some long random string
+# Your kindle address (e.g. foo@kindle.com)
+kindle_address = you@kindle.com
+# URL to wallabag-kindle instance
+wallabag_kindle_url = https://your.server

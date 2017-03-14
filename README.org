@@ -1,0 +1,63 @@
+* Overview
+This is a simple web application to handle to two tasks:
+
+- Whenever an article is added to [[https://wallabag.org/][wallabag]], the article will be converted to a
+  =mobi= file and emailed to your Kindle.
+
+- All links in the article are rewritten so that opening the URL in the Kindle
+  browser will add the article to =wallabag=. This will in turn mail that
+  article in convenient format to your Kindle.
+
+  In practice, this allows following links in a Kindle document and receiving
+  the linked article as a properly formatted e-book without having to convert
+  the linked article manually.
+
+At the moment, this requires running a [[https://wallabag.org][wallabag]] instance using the [[https://github.com/dschoepe/wallabag/tree/hooks][hooks]]
+branch.
+
+** Security
+Since a non-jailbroken Kindle cannot run custom code, we handle adding articles
+to wallabag on the server side instead of on the Kindle itself. To avoid
+unauthorized access to this service, each link contains a fixed secret token as
+a =GET= parameter that is then checked by =wallabag-kindle=. This means that
+running =wallabag-kindle= over =http= instead of =https= will disclose that
+token to every machine in between, such as wifi access points.
+
+It is *highly recommended* to only run =wallabag-kindle= over =https=.
+If you are looking for an easy way to add =https= to your
+web server, take a look at [[https://letsencrypt.org/][LetsEncrypt]].
+
+By default, =wallabag-kindle= will refuse to run over =http=. If you want to
+override this behavior, add =allow_http = true= to your configuration file.
+*Only do this if you really know what you are doing.*
+
+* Installation
+- Make sure that the following dependencies are available:
+  + [[https://www.python.org/][python3]]
+  + [[https://calibre-ebook.com/][calibre]]
+  + [[ftp://ftp.andrew.cmu.edu/pub/mpack][mpack]]
+- Ensure that your MTA can send mail to your Kindle address
+  and add the sender address to the list of allowed addresses
+  on your Amazon account.
+- Install the package via =python3 setup.py install= or
+  locally via =python3 setup.py install --user=.
+- If necessary, adjust the path to the configuration file in
+  =wallabag-kindle.ini=.
+- Copy the example configuration in =config.example= to that
+  location case. In case of the default location:
+
+#+begin_src shell
+cp config.example ~/.wallabag-kindle
+#+end_src
+
+- Set the configuration parameters. Note that you have to create an API client
+  in your =wallabag= instance to obtain the =wb_client_id= an =wb_client_secret=
+  values.
+- Use a long random string for secret token. For example, such a string can be
+  generated using [[https://sourceforge.net/projects/pwgen/][pwgen]] by running `pwgen -1 64`.
+- Configure your web server to serve the =uwsgi= application specified in
+  =wallabag-kindle.ini=. Refer to your web server's documentation for details.
+- Add the following URL as the new article hook in your wallabag instance:
+  https://$wallabag_kindle_server/?key=$key&action=send&article_id=%i&article_url=%u&article_title=%t
+  where =$wallabag_kindle_server= should be replaced by the URL of your =wallabag-kindle=
+  instance and =key= by the value of =secret_token= from the previous step.
