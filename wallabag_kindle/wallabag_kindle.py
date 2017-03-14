@@ -82,16 +82,17 @@ def get_wallabag_token(config):
 def replace_in_doc(config, doc):
     soup = BeautifulSoup(doc.get_content(), 'html.parser')
     print(type(doc.get_content()))
-    for link in filter(lambda l: 'href' in l, soup.find_all('a')):
-        target = link['href']
-        print(target)
-        if target != "https://github.com/wallabag/wallabag/issues":
-            new_target = urljoin(config['wallabag_kindle_url'],
-                                 '?key=%s&action=add&url=%s' %
-                                 (config['secret_token'],
-                                  urllib.parse.quote_plus(target)))
-            print("Replacing %s with %s" % (target, new_target))
-            link['href'] = new_target
+    for link in soup.find_all('a'):
+        if 'href' in link.attrs:
+            target = link['href']
+            print(target)
+            if target != "https://github.com/wallabag/wallabag/issues":
+                new_target = urljoin(config['wallabag_kindle_url'],
+                                     '?key=%s&action=add&url=%s' %
+                                     (config['secret_token'],
+                                      urllib.parse.quote_plus(target)))
+                print("Replacing %s with %s" % (target, new_target))
+                link['href'] = new_target
     doc.content = soup.encode(formatter=None)
 
 def replace_links_in_file(config, f):
