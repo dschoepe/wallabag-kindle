@@ -82,7 +82,7 @@ def get_wallabag_token(config):
 def replace_in_doc(config, doc):
     soup = BeautifulSoup(doc.get_content(), 'html.parser')
     print(type(doc.get_content()))
-    for link in soup.find_all('a'):
+    for link in filter(lambda l: 'href' in l, soup.find_all('a')):
         target = link['href']
         print(target)
         if target != "https://github.com/wallabag/wallabag/issues":
@@ -90,14 +90,9 @@ def replace_in_doc(config, doc):
                                  '?key=%s&action=add&url=%s' %
                                  (config['secret_token'],
                                   urllib.parse.quote_plus(target)))
-            "%s/kindle/cgi-bin/add-to-wb.py?key=%s&url=%s" %\
-                         (config['wb_url'],
-                          config['secret_token'],
-                          urllib.parse.quote(target))
             print("Replacing %s with %s" % (target, new_target))
             link['href'] = new_target
     doc.content = soup.encode(formatter=None)
-    # print(soup.prettify(formatter=None))
 
 def replace_links_in_file(config, f):
     book = epub.read_epub(f)
@@ -117,7 +112,6 @@ def add_article(config, data, token):
                                  data=urllib.parse.urlencode(params).encode('utf-8'))
     resp = urllib.request.urlopen(req)
 
-    # wb.post_entries(url=url)
     output += ["Done, response code: %i<br/>" % resp.getcode()]
     return "<br/>".join(output).encode('utf-8')
 
