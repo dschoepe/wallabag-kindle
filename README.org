@@ -15,6 +15,8 @@ This is a simple web application to handle to two tasks:
 At the moment, this requires running a [[https://wallabag.org][wallabag]] instance using the [[https://github.com/dschoepe/wallabag/tree/hooks][hooks]]
 branch.
 
+*Warning*: While this works well for me, the code has been barely tested, so
+use this project at your own risk.
 ** Security
 Since a non-jailbroken Kindle cannot run custom code, we handle adding articles
 to wallabag on the server side instead of on the Kindle itself. To avoid
