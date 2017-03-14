@@ -56,10 +56,10 @@ cp config.example ~/.wallabag-kindle
   in your =wallabag= instance to obtain the =wb_client_id= an =wb_client_secret=
   values.
 - Use a long random string for secret token. For example, such a string can be
-  generated using [[https://sourceforge.net/projects/pwgen/][pwgen]] by running `pwgen -1 64`.
+  generated using [[https://sourceforge.net/projects/pwgen/][pwgen]] by running ~pwgen -1 64~.
 - Configure your web server to serve the =uwsgi= application specified in
   =wallabag-kindle.ini=. Refer to your web server's documentation for details.
 - Add the following URL as the new article hook in your wallabag instance:
-  https://$wallabag_kindle_server/?key=$key&action=send&article_id=%i&article_url=%u&article_title=%t
+  ~https://$wallabag_kindle_server/?key=$key&action=send&article_id=%i&article_url=%u&article_title=%t~
   where =$wallabag_kindle_server= should be replaced by the URL of your =wallabag-kindle=
   instance and =key= by the value of =secret_token= from the previous step.
