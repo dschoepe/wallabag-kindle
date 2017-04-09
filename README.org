@@ -28,11 +28,6 @@ token to every machine in between, such as wifi access points.
 It is *highly recommended* to only run =wallabag-kindle= over =https=.
 If you are looking for an easy way to add =https= to your
 web server, take a look at [[https://letsencrypt.org/][LetsEncrypt]].
-
-By default, =wallabag-kindle= will refuse to run over =http=. If you want to
-override this behavior, add =allow_http = true= to your configuration file.
-*Only do this if you really know what you are doing.*
-
 * Installation
 - Make sure that the following dependencies are available:
   + [[https://www.python.org/][python3]]
